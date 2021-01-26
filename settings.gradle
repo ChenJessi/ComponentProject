@@ -1,0 +1,6 @@
+include ':webview'
+include ':common'
+include ':base'
+include ':network'
+include ':app'
+rootProject.name = "ComponentProject"
