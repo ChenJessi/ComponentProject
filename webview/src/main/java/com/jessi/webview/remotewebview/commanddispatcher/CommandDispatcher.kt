@@ -9,8 +9,8 @@ import com.jessi.webview.IWebToMain
 import com.jessi.webview.command.CommandsManager
 import com.jessi.webview.command.ResultBack
 import com.jessi.webview.remotewebview.BaseWebView
-import com.jessi.webview.remotewebview.utils.MainLooper
-import com.jessi.webview.remotewebview.utils.NATIVE2WEB_CALLBACK
+import com.jessi.webview.utils.MainLooper
+import com.jessi.webview.utils.NATIVE2WEB_CALLBACK
 import kotlin.concurrent.thread
 
 

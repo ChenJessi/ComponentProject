@@ -1,4 +1,4 @@
-package com.jessi.webview.remotewebview.utils
+package com.jessi.webview.utils
 
 const val LEVEL_REMOTE_PROCESS = 0 // local command, that is to say, this command execution does not require app.
 

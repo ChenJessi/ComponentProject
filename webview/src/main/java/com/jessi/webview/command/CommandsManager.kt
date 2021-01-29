@@ -1,11 +1,10 @@
 package com.jessi.webview.command
 
 import android.content.Context
-import android.webkit.WebView
-import com.jessi.webview.remotewebview.utils.AidlError
-import com.jessi.webview.remotewebview.utils.ERROR_CODE
-import com.jessi.webview.remotewebview.utils.ERROR_MESSAGE
-import com.jessi.webview.remotewebview.utils.FAILED
+import com.jessi.webview.utils.AidlError
+import com.jessi.webview.utils.ERROR_CODE
+import com.jessi.webview.utils.ERROR_MESSAGE
+import com.jessi.webview.utils.FAILED
 
 
 private const val TAG = "CommandsManager"

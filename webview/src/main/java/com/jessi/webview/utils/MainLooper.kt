@@ -1,4 +1,4 @@
-package com.jessi.webview.remotewebview.utils
+package com.jessi.webview.utils
 
 import android.os.Handler
 import android.os.Looper

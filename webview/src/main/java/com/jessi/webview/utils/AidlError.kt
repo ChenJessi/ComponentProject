@@ -1,7 +1,6 @@
-package com.jessi.webview.remotewebview.utils
+package com.jessi.webview.utils
 
 import android.annotation.SuppressLint
-import android.os.Parcel
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
