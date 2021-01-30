@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.widget.Toast
-import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import com.jessi.webview.R
@@ -66,7 +65,7 @@ internal abstract class BaseWeViewFragment : Fragment(), WebViewCallBack {
         if (webUrl.isNullOrEmpty()){
             webView?.loadUrl(webUrl!!)
         }else{
-            Toast.makeText(activity, "WebView url is can't empty", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, "WebView url is can't empty!", Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -120,10 +119,26 @@ internal abstract class BaseWeViewFragment : Fragment(), WebViewCallBack {
 
 
 
-    private fun clearWebView(w : WebView){
+    private fun clearWebView(webView : WebView?){
+        var w = webView
         if (Looper.myLooper() != Looper.getMainLooper()){
             return
         }
-
+        w?.apply {
+            stopLoading()
+            handler?.removeCallbacksAndMessages(null)
+            removeAllViews()
+            parent?.let {
+                (it as ViewGroup)?.removeView(this)
+            }
+            webChromeClient = null
+//            webViewClient = null
+            tag = null
+            clearHistory()
+            destroy()
+        }
+        w = null
     }
+
+
 }
