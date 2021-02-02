@@ -33,9 +33,10 @@ ext{
     versionCode = 1
     versionName = "1.0"
 
-    appcompatVersion = '1.2.0'
+    appcompatVersion = '1.3.0-alpha02'
     materialVersion = '1.2.1'
     coreKtxVersion = '1.3.2'
+    fragmentKtx = '1.3.2'
     livedataKtxVersion = '2.2.0'
     viewmodelKtxVersion = '2.2.0'
     constraintlayout_Version = '2.0.4'

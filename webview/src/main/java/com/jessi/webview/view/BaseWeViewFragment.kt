@@ -1,15 +1,23 @@
 package com.jessi.webview.view
 
+import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
+import android.content.Intent.*
 import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
+import android.view.KeyEvent
+import android.view.KeyEvent.ACTION_DOWN
+import android.view.KeyEvent.KEYCODE_BACK
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import com.jessi.webview.R
@@ -21,6 +29,8 @@ import com.jessi.webview.utils.INTENT_TAG_URL
 
 
 const val ACCOUNT_INFO_HEADERS = "account_header"
+
+const val REQUEST_CODE_LOLIPOP = 1
 
 private const val TAG = "BaseWeViewFragment"
 internal abstract class BaseWeViewFragment : Fragment(), WebViewCallBack {
@@ -103,19 +113,81 @@ internal abstract class BaseWeViewFragment : Fragment(), WebViewCallBack {
     }
 
     override fun pageFinished(url: String?) {
-        TODO("Not yet implemented")
+
     }
 
     override fun onError() {
-        TODO("Not yet implemented")
+
     }
+
+    private var mFilePathCallback: ValueCallback<Array<Uri?>?>? = null
 
     override fun onShowFileChooser(
         cameraIntent: Intent?,
         filePathCallback: ValueCallback<Array<Uri?>?>?
     ) {
-        TODO("Not yet implemented")
+        /**
+         * 整个弹窗为相机，相册，文件管理
+         *  selectionIntent(相册、文件管理)
+         *  Intent selectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
+         *  selectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
+         *  selectionIntent.setType("image/\*")
+         */
+        mFilePathCallback = filePathCallback
+        /**
+         * 如果通过下面的方式，则弹出的选择框有:相机、相册(Android9.0,Android8.0)
+         * 如果是小米Android6.0系统上，依然是：相机、相册、文件管理
+         * 如果安装了其他的相机(百度魔拍)、文件管理程序(ES文件管理器)，也有可能会弹出
+         */
+        var selectionIntent = Intent(ACTION_PICK, null).apply {
+            type = "image/*"
+        }
+
+        val intentArray = if (cameraIntent == null) arrayOf<Intent>()  else arrayOf(cameraIntent)
+        val chooserIntent = Intent(ACTION_CHOOSER).apply {
+            putExtra(EXTRA_TITLE, getString(R.string.file_chooser))
+            putExtra(EXTRA_INTENT, selectionIntent)
+            putExtra(EXTRA_INITIAL_INTENTS, intentArray)
+        }
+
+        registerForActivityResult(object : ActivityResultContract<Intent, String?>(){
+            override fun createIntent(context: Context, input: Intent?): Intent {
+                return chooserIntent
+            }
+
+            override fun parseResult(resultCode: Int, intent: Intent?): String? {
+                return when(resultCode){
+                    RESULT_OK -> {
+                        intent?.dataString
+                    }
+                    else -> null
+
+                }
+            }
+        }
+        ) {
+
+        }.launch(chooserIntent)
+
     }
+
+
+    private fun onKeyDown(keyCode : Int , event : KeyEvent) : Boolean{
+        if (keyCode == KEYCODE_BACK && event.action == ACTION_DOWN){
+            return onBackHandle()
+        }
+        return false
+    }
+
+    private fun onBackHandle() : Boolean{
+        if (webView?.canGoBack() == true){
+            webView?.goBack()
+            return true
+        }else{
+            return false
+        }
+    }
+
 
 
 
@@ -138,6 +210,18 @@ internal abstract class BaseWeViewFragment : Fragment(), WebViewCallBack {
             destroy()
         }
         w = null
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+}
+
+class a :AppCompatActivity(){
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
     }
 
 

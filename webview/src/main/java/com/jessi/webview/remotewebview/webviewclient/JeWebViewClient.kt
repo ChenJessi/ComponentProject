@@ -28,7 +28,6 @@ class JeWebViewClient(val webView: WebView,
     fun isReady() : Boolean = isReady
 
 
-
     interface WebViewTouch{
         fun isTouchByUser() : Boolean
     }
