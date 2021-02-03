@@ -7,6 +7,7 @@ import android.content.Intent.*
 import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import android.view.KeyEvent
 import android.view.KeyEvent.ACTION_DOWN
 import android.view.KeyEvent.KEYCODE_BACK
@@ -17,6 +18,7 @@ import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
@@ -33,14 +35,14 @@ const val ACCOUNT_INFO_HEADERS = "account_header"
 const val REQUEST_CODE_LOLIPOP = 1
 
 private const val TAG = "BaseWeViewFragment"
-internal abstract class BaseWeViewFragment : Fragment(), WebViewCallBack {
+abstract class BaseWeViewFragment : Fragment(), WebViewCallBack {
 
     private var accountInfoHeaders : MutableMap<String, String>? = null
     private var webUrl : String? = null
     private var webView : ProgressWebView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val bundle = arguments?.apply {
+         arguments?.apply {
              webUrl = getString(INTENT_TAG_URL)
             if (containsKey(ACCOUNT_INFO_HEADERS)){
                 val str = getString(ACCOUNT_INFO_HEADERS)
@@ -120,7 +122,7 @@ internal abstract class BaseWeViewFragment : Fragment(), WebViewCallBack {
 
     }
 
-    private var mFilePathCallback: ValueCallback<Array<Uri?>?>? = null
+
 
     override fun onShowFileChooser(
         cameraIntent: Intent?,
@@ -133,7 +135,6 @@ internal abstract class BaseWeViewFragment : Fragment(), WebViewCallBack {
          *  selectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
          *  selectionIntent.setType("image/\*")
          */
-        mFilePathCallback = filePathCallback
         /**
          * 如果通过下面的方式，则弹出的选择框有:相机、相册(Android9.0,Android8.0)
          * 如果是小米Android6.0系统上，依然是：相机、相册、文件管理
@@ -150,25 +151,17 @@ internal abstract class BaseWeViewFragment : Fragment(), WebViewCallBack {
             putExtra(EXTRA_INITIAL_INTENTS, intentArray)
         }
 
-        registerForActivityResult(object : ActivityResultContract<Intent, String?>(){
-            override fun createIntent(context: Context, input: Intent?): Intent {
-                return chooserIntent
-            }
-
-            override fun parseResult(resultCode: Int, intent: Intent?): String? {
-                return when(resultCode){
-                    RESULT_OK -> {
-                        intent?.dataString
-                    }
-                    else -> null
-
-                }
-            }
-        }
-        ) {
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
 
         }.launch(chooserIntent)
 
+
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result ->
+            Log.e(TAG, "startActivityForResult:  ${result.data?.dataString}")
+            val results = arrayOf<Uri?>()
+            result.data?.dataString?.let { results.plus(Uri.parse(it)) }
+            filePathCallback?.onReceiveValue(results)
+        }.launch(chooserIntent)
     }
 
 

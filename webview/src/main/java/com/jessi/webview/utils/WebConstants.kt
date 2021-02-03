@@ -14,13 +14,12 @@ const val FAILED = 0 // 失败
 const val EMPTY = "" // 无返回结果
 
 
-const val WEB2NATIVE_CALLBACk = "callback"
+const val WEB2NATIVE_CALLBACK = "callback"
 const val NATIVE2WEB_CALLBACK = "callbackname"
 
-const val ACTION_EVENT_BUS = "eventBus"
 
-const val INTENT_TAG_TITLE = "title"
 const val INTENT_TAG_URL = "url"
+const val INTENT_TAG_TITLE = "title"
 const val INTENT_TAG_HEADERS = "headers"
 
 object ERROR_CODE {
