@@ -43,7 +43,10 @@ class WebViewActivity : AppCompatActivity() {
             replace(R.id.frameLayout, webViewFragment)
             commit()
         }
-
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeButtonEnabled(true)
+        }
     }
 
 
