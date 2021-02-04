@@ -165,7 +165,7 @@ abstract class BaseWeViewFragment : Fragment(), WebViewCallBack {
     }
 
 
-    private fun onKeyDown(keyCode : Int , event : KeyEvent) : Boolean{
+     fun onKeyDown(keyCode : Int , event : KeyEvent) : Boolean{
         if (keyCode == KEYCODE_BACK && event.action == ACTION_DOWN){
             return onBackHandle()
         }

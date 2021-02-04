@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import com.google.gson.Gson
 import com.jessi.componentproject.databinding.ActivityMainBinding
 import com.jessi.componentproject.databinding.ActivitySecondBinding
+import com.jessi.webview.WebViewActivity
 
 private const val TAG = "MainActivity"
 
@@ -22,18 +23,7 @@ class MainActivity : AppCompatActivity() {
         val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this , R.layout.activity_main)
 
         binding.button.setOnClickListener {
-            val map = mutableMapOf<String, String>().apply {
-                put("aaa", "aaa")
-                put("bbb", "bbb")
-                put("ccc", "ccc")
-            }
-            Log.e(TAG, "onCreate:   map  : $map")
-            val a = Gson().toJson(map)
-            Log.e(TAG, "onCreate:   a : $a")
-            val b = Gson().fromJson<MutableMap<String, String>>(a, MutableMap::class.java).apply {
-                put("ddd", "ddd")
-            }
-            Log.e(TAG, "onCreate:   a : $b")
+            WebViewActivity.newInstance(this@MainActivity , "https://www.baidu.com/")
         }
     }
 
