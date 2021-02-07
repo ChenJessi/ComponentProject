@@ -74,7 +74,7 @@ abstract class BaseWeViewFragment : Fragment(), WebViewCallBack {
     }
 
     private fun loadUrl(){
-        if (webUrl.isNullOrEmpty()){
+        if (!webUrl.isNullOrEmpty()){
             webView?.loadUrl(webUrl!!)
         }else{
             Toast.makeText(activity, "WebView url is can't empty!", Toast.LENGTH_SHORT).show()
@@ -170,6 +170,10 @@ abstract class BaseWeViewFragment : Fragment(), WebViewCallBack {
             return onBackHandle()
         }
         return false
+    }
+
+    fun onKeyDown() : Boolean{
+        return onBackHandle()
     }
 
     private fun onBackHandle() : Boolean{

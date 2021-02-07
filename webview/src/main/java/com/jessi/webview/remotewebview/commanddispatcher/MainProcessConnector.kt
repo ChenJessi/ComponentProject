@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import android.util.Log
 import com.jessi.webview.IWebToMain
 import com.jessi.webview.mainprocess.MainProHandleRemoteService
 import java.util.concurrent.CountDownLatch
@@ -13,6 +14,7 @@ import java.util.concurrent.CountDownLatch
 /**
  * 用于remoteweb process 向 main process 获取binder
  */
+private const val TAG = "MainProcessConnector"
 class MainProcessConnector private constructor() {
     private var mContext : Context? = null
     private var mConnectBinderPoolCountDownLatch : CountDownLatch? = null
@@ -25,12 +27,13 @@ class MainProcessConnector private constructor() {
         }
         fun instance(context: Context) : MainProcessConnector {
             instance.mContext = context.applicationContext
+            instance.connectToMainProcessService()
             return instance
         }
     }
 
     init {
-        connectToMainProcessService()
+
     }
     @Synchronized
     private fun  connectToMainProcessService(){

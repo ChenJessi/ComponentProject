@@ -8,16 +8,19 @@ import android.net.Uri
 import android.net.http.SslError
 import android.text.TextUtils
 import android.util.Log
-import android.view.View
 import android.webkit.*
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.startActivity
 import com.jessi.webview.R
 import com.jessi.webview.remotewebview.CONTENT_SCHEME
 import com.jessi.webview.remotewebview.callback.WebViewCallBack
 
+
 private const val TAG = "JeWebViewClient"
 
 private const val SCHEME_SMS = "sms:"
+private const val SCHEME_HTTP = "http:"
+private const val SCHEME_HTTPS = "https:"
 class JeWebViewClient(val webView: WebView,
                       val webViewCallBack: WebViewCallBack,
                       val headers: MutableMap<String, String>,
@@ -72,8 +75,13 @@ class JeWebViewClient(val webView: WebView,
             return super.shouldOverrideUrlLoading(view, request);
         }
         if (handleLinked(request?.url.toString())) {
-            return true;
+            return true
         }
+
+        if (handleOtherLinked(request?.url.toString())){
+            return true
+        }
+
         // 控制页面中点开新的链接在当前webView中打开
         view?.loadUrl(request?.url.toString(), headers)
         return true
@@ -84,10 +92,10 @@ class JeWebViewClient(val webView: WebView,
      * 支持电话、短信、邮件、地图跳转
      */
     private fun handleLinked(url: String) : Boolean{
-        if (url.startsWith(WebView.SCHEME_TEL)
-            || url.startsWith(SCHEME_SMS)
-            || url.startsWith(WebView.SCHEME_MAILTO)
-            || url.startsWith(WebView.SCHEME_GEO)
+        if (url.startsWith(WebView.SCHEME_TEL, ignoreCase = true)
+            || url.startsWith(SCHEME_SMS, ignoreCase = true)
+            || url.startsWith(WebView.SCHEME_MAILTO, ignoreCase = true)
+            || url.startsWith(WebView.SCHEME_GEO, ignoreCase = true)
         ) {
             try {
                 val intent = Intent(Intent.ACTION_VIEW)
@@ -95,6 +103,23 @@ class JeWebViewClient(val webView: WebView,
                 webView.context.startActivity(intent)
             } catch (ignored: ActivityNotFoundException) {
                 ignored.printStackTrace()
+            }
+            return true
+        }
+        return false
+    }
+
+    /**
+     * 第三方的链接
+     */
+    private fun handleOtherLinked(url : String) : Boolean{
+        if (!url.startsWith(SCHEME_HTTP, ignoreCase = true)
+            && !url.startsWith(SCHEME_HTTPS, ignoreCase = true)){
+            try {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                webView.context.startActivity(intent)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
             return true
         }

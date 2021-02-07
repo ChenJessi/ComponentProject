@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this , R.layout.activity_main)
 
         binding.button.setOnClickListener {
-            WebViewActivity.newInstance(this@MainActivity , "https://www.baidu.com/")
+            WebViewActivity.newInstance(this@MainActivity , "https://www.baidu.com/", "百度")
         }
     }
 

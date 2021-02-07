@@ -8,6 +8,8 @@
     <application>
 
         <activity android:name=".WebViewActivity"
+
+            android:process=":remoteweb"
             android:screenOrientation="portrait"/>
         <service android:name=".mainprocess.MainProHandleRemoteService"/>
     </application>

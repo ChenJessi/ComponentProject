@@ -3,7 +3,9 @@ package com.jessi.webview
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.gson.Gson
@@ -13,6 +15,8 @@ import com.jessi.webview.utils.INTENT_TAG_URL
 import com.jessi.webview.view.ACCOUNT_INFO_HEADERS
 import com.jessi.webview.view.BaseWeViewFragment
 
+
+private const val TAG = "WebViewActivity"
 class WebViewActivity : AppCompatActivity() {
 
 
@@ -28,9 +32,9 @@ class WebViewActivity : AppCompatActivity() {
 
 
 
-    val title : String by lazy { intent.getStringExtra(INTENT_TAG_TITLE) ?: ""}
-    val url : String by lazy { intent.getStringExtra(INTENT_TAG_URL) ?: ""}
-    val webViewFragment = WebViewFragment.newInstance(url)
+    val title : String by lazy { intent?.getStringExtra(INTENT_TAG_TITLE) ?: ""}
+    val url : String by lazy { intent?.getStringExtra(INTENT_TAG_URL) ?: ""}
+    val webViewFragment : WebViewFragment by lazy {  WebViewFragment.newInstance(url) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,16 +54,17 @@ class WebViewActivity : AppCompatActivity() {
     }
 
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (event != null){
-            val flag = webViewFragment.onKeyDown(keyCode, event)
-            if (flag){
-                return flag
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            android.R.id.home -> {
+                val flag = webViewFragment.onKeyDown()
+                if (!flag){
+                    finish()
+                }
+                return true
             }
         }
-        return super.onKeyDown(keyCode, event)
+        return super.onOptionsItemSelected(item)
     }
-
-
 
 }
