@@ -67,4 +67,10 @@ class WebViewActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onBackPressed() {
+        val flag = webViewFragment.onKeyDown()
+        if (!flag){
+            super.onBackPressed()
+        }
+    }
 }

@@ -8,7 +8,7 @@
     <application>
 
         <activity android:name=".WebViewActivity"
-
+            android:hardwareAccelerated="true"
             android:process=":remoteweb"
             android:screenOrientation="portrait"/>
         <service android:name=".mainprocess.MainProHandleRemoteService"/>
